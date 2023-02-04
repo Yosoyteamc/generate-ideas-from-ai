@@ -9,7 +9,7 @@ function App() {
   return (
     <BrowserRouter basename='/hot-ideas'>
       <Routes>
-        <Route path="/" element={<Started></Started>} />
+        <Route index path="/" element={<Started></Started>} />
         <Route path='main' element={<Main></Main>}>
           <Route index element={<SelectIdeas></SelectIdeas>} />
           <Route path='summary' element={<Summary></Summary>} />

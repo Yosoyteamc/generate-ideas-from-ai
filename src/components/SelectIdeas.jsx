@@ -65,15 +65,14 @@ const SelectIdeas = () => {
             <div className=''>
                 {
                     listDefault.map((item, index) => (
-                        <TinderCard
+                        <div
                             key={index}
                             className='swipe'
-                            preventSwipe={['up', 'down']}
                         >
                             <div className='border p-2 m-5'>
                                 <h1 className=''>{item.title}</h1>
                             </div>
-                        </TinderCard>
+                        </div>
                     ))
                 }
             </div>
