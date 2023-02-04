@@ -7,13 +7,13 @@ const COHERE_API_KEY = 'N4FP3pG6zEE14Jch9i7D5jb3drptoqChzKmPvdii';
 const COHERE_API_VERSION = '2022-12-06';
 
 
-async function generateListOfTitles(){
+async function generateListOfTitles( profile, preferences ){
 
     console.log('generating titles...');
 
     const data = {
         model: 'command-xlarge-nightly',
-        prompt: 'Generar 5 ideas de contenido para un perfil fashion',
+        prompt: 'Generar 5 ideas de contenido para un ' + profile + ' de ' + preferences,
         max_tokens: 300,
         temperature: 0.9,
         k: 0,
@@ -35,11 +35,9 @@ async function generateListOfTitles(){
     }).then(res => res.json());
 
     const suggestions = response?.generations[0].text;
+    console.log(suggestions);
 
-    return suggestions.split('\n').filter(suggestion => {
-        suggestion = suggestion.trim();
-        return !isNaN(suggestion[0]) && suggestion.length > 1;
-    });
+    return suggestions.split('\n').map((item) => item.replaceAll('\'', '').replaceAll(/\d+./g,' ').trim().split('.')[0]).filter((item) => item.length > 8).map((item) => item.split(':')[0])
 
 }
 
@@ -47,7 +45,7 @@ async function generateDescription(title){
     console.log('generating description...');
     const data = {
         model: 'command-xlarge-nightly',
-        prompt: `Genere un párrafo con información que complemente el titulo: '${title}'`,
+        prompt: `Genere un parrafo que complemente este titulo:: '${title}'`,
         max_tokens: 100,
         temperature: 0.9,
         k: 0,
@@ -73,11 +71,11 @@ async function generateDescription(title){
     return description;
 }
 
-async function generateHashTags(title){
+async function generateHashTags(title, profile, preferences){
     console.log('generating hashtags...');
     const data = {
         model: 'command-xlarge-nightly',
-        prompt: `Genere 5 hashtags para este titulo: '${title}', para un perfil fashion`,
+        prompt: `Genere 5 hashtags para este titulo: '${title}', para un ${profile} de ${preferences} `,
         max_tokens: 300,
         temperature: 0.9,
         k: 0,
@@ -159,15 +157,20 @@ export async function createOneSuggestion(position) {
 }
 
 
-export async function createSuggestions() {
+export async function createSuggestions({ profile, preferences}) {
 
-    const suggestionsTitlesArray = await generateListOfTitles();
-    const language = await detectLanguage(suggestionsTitlesArray[0]);
+    console.log('creating suggestions...');
+
+    const suggestionsTitlesArray = await generateListOfTitles(profile, preferences);
+    console.log(suggestionsTitlesArray);
+    const languageArray = await Promise.all(suggestionsTitlesArray.map(async (title) => {
+        return await detectLanguage(title);
+    }));
     const suggestionDescriptionsArray = await Promise.all(suggestionsTitlesArray.map(async (title) => {
         return await generateDescription(title);
     })); 
     const suggestionsHashTagsArray = await Promise.all(suggestionsTitlesArray.map(async (title) => {
-        return await generateHashTags(title);
+        return await generateHashTags(title, profile, preferences[0]);
     }));
 
     // language === 'es' ? null : suggestionsTitlesArray = await translateArrayText(suggestionsTitlesArray).then(
@@ -181,7 +184,8 @@ export async function createSuggestions() {
             suggestion.replace(/\d+./g,'');
         
         const description = suggestionDescriptionsArray[index];
-        const hashtags = suggestionsHashTagsArray[index] || ['fashion'];
+        const hashtags = suggestionsHashTagsArray[index] || [`#${profile}`, `#${preferences[0]}`];
+        const language = languageArray[index];
         
         const date = new Date().getTime();
 
@@ -200,7 +204,7 @@ export async function createSuggestions() {
     });
 
     // console.log(suggestionsTitlesArray, language);
-    // console.log(suggestions);
+    console.log(suggestions);
     // console.log(typeof suggestions); 
     // console.log(suggestionsHashTagsArray);
 

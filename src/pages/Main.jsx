@@ -4,9 +4,9 @@ import { Outlet } from 'react-router-dom';
 const Main = () => {
     return (
         <section className='flex flex-col items-center'>
-            <h1>Aqui va el logo</h1>
+            {/* <p>Aqui va el header</p> */}
             <Outlet></Outlet>
-            <p>Aqui va el footer</p>
+            {/* <p>Aqui va el footer</p> */}
         </section>
     );
 }

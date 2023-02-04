@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { SettingsContext } from '../context/settingsContext';
 
 const profile = {
     streamer: {
@@ -24,6 +25,7 @@ const Inicio = () => {
 
     const [selectedProfile, setSelectedProfile] = useState('');
     const [listFocus, setListFocus] = useState([]);
+    const { setSettings } = useContext(SettingsContext);
     const [error, setError] = useState(false);
     const [select, setSelect] = useState(false);
     const navigate = useNavigate();
@@ -48,15 +50,23 @@ const Inicio = () => {
     }
 
     const navigateToMain = () => {
+        changeContext();
         navigate('/main');
+    }
+
+    const changeContext = () => {
+        setSettings({
+            profile: selectedProfile,
+            preferences: listFocus
+        });
     }
 
     return (
         <div className='flex flex-col justify-center items-center h-screen'>
-            <div className='w-[70%]'>
+            <div className='w-[80%] md:w-[40%] lg:w-1/3'>
                 <h1 className={`${select? 'text-2xl':'text-4xl'} font-semibold transition-all duration-100 `}>Genere contenido colaborando con una IA adaptada a tu perfil.</h1>
                 <div className='mt-5 flex justify-between'>
-                    <select className='bg-[#F2F2F2] p-2 rounded-lg w-[80%] appearance-none outline-none' onChange={handleChange}>
+                    <select className='bg-[#F2F2F2] p-2 rounded-lg w-[80%] lg:w-[85%] appearance-none outline-none' onChange={handleChange}>
                         <option value=''>Selecciona un perfil</option>
                         <option value='streamer'>Streamer</option>
                         <option value='instragramer'>Instagramer</option>
@@ -74,7 +84,7 @@ const Inicio = () => {
                                     profile[selectedProfile].tags.map( (tag, index) => (
                                         <li key={index} className='inline'>
                                             <input className='absolute opacity-0 peer' type="checkbox" id={`checkbox${index}`} onChange={ setOnList } value={tag}/>
-                                            <label className='cursor-pointer py-1 px-2 inline-block bg-[#5CF2AC]/20 rounded-md mx-1 whitespace-nowrap my-[3px] select-none transition-all peer-checked:bg-[#5CF2AC] duration-100' for={`checkbox${index}`}>{tag}</label>
+                                            <label className='cursor-pointer py-1 px-2 inline-block bg-[#5CF2AC]/20 rounded-md mx-1 whitespace-nowrap my-[3px] select-none transition-all peer-checked:bg-[#5CF2AC] duration-100' htmlFor={`checkbox${index}`}>{tag}</label>
                                         </li>
                                     ))
                                 }

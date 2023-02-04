@@ -1,5 +1,7 @@
-import React from 'react';
-import TinderCard from 'react-tinder-card';
+import React, { useContext, useEffect, useState } from 'react';
+import { createSuggestions } from '../service/CohereIA';
+import { useNavigate } from 'react-router-dom';
+import { SettingsContext } from '../context/settingsContext';
 
 const listDefault = [
     {
@@ -59,26 +61,60 @@ const listDefault = [
     }
 ]
 
+
 const SelectIdeas = () => {
+
+    const [loading, setLoading] = useState(true);
+    const [listIdeas, setListIdeas] = useState(listDefault);
+    const { settings } = useContext(SettingsContext);
+    // const [settingsContext, setSettingsContext] = useState({});
+    const navigate = useNavigate();
+
+    const navigateTo = (id) => {
+        navigate('/main/idea/' + id);
+    }
+
+    useEffect(() => {
+        obtainList();
+    }, []);
+
+    const obtainList = async () => {
+        try {
+            const response = JSON.parse(localStorage.getItem('listIdeas')) || await createSuggestions(settings);
+            setListIdeas(response);
+
+            response && setLoading(false);
+            saveListIdeas(response);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const saveListIdeas = (list) => {
+        localStorage.setItem('listIdeas', JSON.stringify(list));
+    }
+
+
     return (
-        <div className='h-screen border w-screen p-3'>
-            <div className=''>
+        <div className={`w-screen p-5 ${loading? 'animate-pulse pointer-events-none': ''}`}>
+            <ul className='flex flex-col md:flex-wrap md:flex-row items-center justify-center md:justify-items-center'>
                 {
-                    listDefault.map((item, index) => (
-                        <div
-                            key={index}
-                            className='swipe'
-                        >
-                            <div className='border p-2 m-5'>
-                                <h1 className=''>{item.title}</h1>
+                    listIdeas.map((item, index) => (
+                        <li key={index} className='m-4 mb-2 w-[330px]'>
+                            <div className='flex relative'>
+                                <div className='bg-[#F2F2F2] w-[80%] rounded-t-[2.8rem] h-[55px]'></div>
+                                <button className=' absolute right-0 top-1 border-[10px] border-white text-[#0D0D0D] w-min-[20%] rounded-bl-[1rem] min-h-full'><p className=' p-2 px-4 rounded-2xl bg-[#5CF2AC] '>{'<-'}</p></button>
                             </div>
-                        </div>
+                            <div className='bg-[#F2F2F2] py-3 rounded-b-[3rem] rounded-tr-3xl'>
+                                <h2 className={`px-8 mt-2 pb-2 font-semibold text-xl ${loading? 'opacity-30':''}`}>{item.title.length > 60 ? item.title.slice(0, 60) + '...' : item.title}</h2>
+                                <p className={`px-8 pb-6 text-[#0D0D0D]/70 ${loading? 'opacity-30':''}`}>{item.description.length > 70 ? item.description.slice(0, 70) + '. ' : item.description} 
+                                    <button type={'button'} onClick={ ()=>{ navigateTo(item.id) }}><span className='text-[#797FF2] text-sm cursor-pointer'>Ver más...</span></button>
+                                </p>
+                            </div>
+                        </li>
                     ))
                 }
-            </div>
-            <div>
-                Menu
-            </div>
+            </ul>
         </div>
     );
 }
