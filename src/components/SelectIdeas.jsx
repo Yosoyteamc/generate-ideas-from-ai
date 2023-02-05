@@ -132,7 +132,7 @@ const SelectIdeas = () => {
     }
 
     return (
-        <div className={`w-screen p-5 relative max-w-[1200px]`}>
+        <div className={`w-screen p-5 relative max-w-[1200px] flex flex-col items-center`}>
             <div ref={welcomeMessage} className={`mb-2 w-[330px] ${closeMessage? closedWhitAnimation():'' }`}>
                 <div className='flex relative'>
                     <div className='bg-[#5CF2AC] w-[80%] rounded-t-[2.8rem] h-[55px]'></div>
@@ -142,14 +142,14 @@ const SelectIdeas = () => {
                     <h2 className={`px-8 mt-2 pb-2 font-semibold text-3xl`}>Bienvenido</h2>
                     <p className={`px-8 pb-6 text-[#0D0D0D] `}>
                         Hola  ¿Qué tal? { loading? 'Estamos generando ': 'Generamos '} algunas ideas para que puedas empezar a crear contenido. No queremos  quitarte parte del proceso creativo, pero si darte un poco de ayuda.
-                        Lo bueno de este proceso es que puedes guardar las ideas que te parezcan más interesantes, editarlas, eliminarlas o generar más. <br/><br/>{ loading? 'No tardaremos mucho...': '¡Vamos!'}
+                        Lo bueno es que desde ahora ${loading? 'podrás':'puedes'} guardar las ideas que te parezcan más interesantes, editarlas, eliminarlas o generar más. <br/><br/>{ loading? 'No tardaremos mucho...': '¡Vamos!'}
                     </p>
                 </div>
             </div>
             {
                 !loading && closeMessage &&              
                 <div className='mb-8 slide-in-top flex flex-col items-start sm:items-center'>
-                    <h2 className={`${listIdeas.length < 9? 'text-5xl': 'md:text-[2.9rem] leading-[3.1rem] text-[2.7rem]' } font-semibold mb-6`}>Ideas generadas {`(${listIdeas.length})`}</h2>
+                    <h2 className={`${listIdeas.length < 9? 'md:text-5xl leading-[1.2] text-[2.8rem]': 'md:text-[1.3] leading-[3.1rem] text-[2.7rem]' } font-semibold mb-6`}>Ideas generadas {`(${listIdeas.length})`}</h2>
                     <button className='bg-[#5CF2AC] text-[#0D0D0D] px-4 py-2 rounded-2xl hover:bg-[#6638A6] transition-colors duration-500 flex items-center' onClick={obtainNewElement}>
                         <IconCreate className='mr-2'></IconCreate>Generar otra idea
                     </button>

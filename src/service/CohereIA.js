@@ -35,7 +35,7 @@ async function generateListOfTitles( profile, preferences ){
     }).then(res => res.json());
 
     const suggestions = response?.generations[0].text;
-    console.log(suggestions);
+    // console.log(suggestions);
 
     return suggestions.split('\n').map((item) => 
         item.replaceAll('\'', '').replaceAll(/\d+./g,' ').trim().split('.')[0])
