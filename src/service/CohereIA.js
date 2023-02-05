@@ -37,15 +37,18 @@ async function generateListOfTitles( profile, preferences ){
     const suggestions = response?.generations[0].text;
     console.log(suggestions);
 
-    return suggestions.split('\n').map((item) => item.replaceAll('\'', '').replaceAll(/\d+./g,' ').trim().split('.')[0]).filter((item) => item.length > 8).map((item) => item.split(':')[0])
+    return suggestions.split('\n').map((item) => 
+        item.replaceAll('\'', '').replaceAll(/\d+./g,' ').trim().split('.')[0])
+        .filter((item) => item.length > 6)
+        .map((item) => item.split(':')[0])
 
 }
 
-async function generateDescription(title){
+async function generateDescription(title, profile, preferences){
     console.log('generating description...');
     const data = {
         model: 'command-xlarge-nightly',
-        prompt: `Genere un parrafo que complemente este titulo:: '${title}'`,
+        prompt: `Genere un parrafo para un ${profile} de ${preferences} que complemente este titulo: '${title}'`,
         max_tokens: 100,
         temperature: 0.9,
         k: 0,
@@ -75,7 +78,7 @@ async function generateHashTags(title, profile, preferences){
     console.log('generating hashtags...');
     const data = {
         model: 'command-xlarge-nightly',
-        prompt: `Genere 5 hashtags para este titulo: '${title}', para un ${profile} de ${preferences} `,
+        prompt: `Genere 5 hashtags para un ${profile} de ${preferences} que aporten a este titulo: '${title}'`,
         max_tokens: 300,
         temperature: 0.9,
         k: 0,

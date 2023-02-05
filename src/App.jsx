@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Started from './pages/Started'
-import Main from './pages/Main'
+import StartedPage from './pages/StartedPage'
+import MainPage from './pages/MainPage'
 import SelectIdeas from './components/SelectIdeas'
 import { SettingsContextProvider } from './context/settingsContext'
 
@@ -10,8 +10,8 @@ function App() {
     <SettingsContextProvider>
       <BrowserRouter basename='/hot-ideas'>
         <Routes>
-          <Route index path="/" element={<Started></Started>} />
-            <Route path='main' element={<Main></Main>}>
+          <Route index path="/" element={<StartedPage></StartedPage>} />
+            <Route path='main' element={<MainPage></MainPage>}>
               <Route index element={<SelectIdeas></SelectIdeas>}/>
               <Route path='idea/:id' element={<h1>idea</h1>} />
             </Route>

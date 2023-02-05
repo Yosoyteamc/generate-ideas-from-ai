@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { createSuggestions } from '../service/CohereIA';
 import { useNavigate } from 'react-router-dom';
 import { SettingsContext } from '../context/settingsContext';
+import PreviewIdea from './pure/PreviewIdea';
+import IconCreate from './icons/IconCreate';
 
 const listDefault = [
     {
@@ -65,6 +67,7 @@ const listDefault = [
 const SelectIdeas = () => {
 
     const [loading, setLoading] = useState(true);
+    const [closeMessage, setCloseMessage] = useState(false);
     const [listIdeas, setListIdeas] = useState(listDefault);
     const { settings } = useContext(SettingsContext);
     // const [settingsContext, setSettingsContext] = useState({});
@@ -96,22 +99,25 @@ const SelectIdeas = () => {
 
 
     return (
-        <div className={`w-screen p-5 ${loading? 'animate-pulse pointer-events-none': ''}`}>
-            <ul className='flex flex-col md:flex-wrap md:flex-row items-center justify-center md:justify-items-center'>
+        <div className={`w-screen p-5`}>
+            { <div className='mb-2 w-[330px] m-auto'>
+                <div className='flex relative'>
+                    <div className='bg-[#5CF2AC] w-[80%] rounded-t-[2.8rem] h-[55px]'></div>
+                    <button className='absolute right-[-5px] top-0 border-[10px] border-white text-[#0D0D0D] w-min-[20%] rounded-bl-[1rem]' onClick={()=>{setCloseMessage(!closeMessage)}}><div className='py-[.8rem] px-[1.2rem] rounded-2xl  bg-[#5CF2AC] hover:bg-[#6638A6] transition-colors duration-500'><IconCreate className='-rotate-45 ml-1 scale-110'></IconCreate></div></button>
+                </div>
+                <div className='bg-[#5CF2AC] py-3 rounded-b-[3rem] mt-[-1px] rounded-tr-3xl'>
+                    <h2 className={`px-8 mt-2 pb-2 font-semibold text-3xl`}>Bienvenido</h2>
+                    <p className={`px-8 pb-6 text-[#0D0D0D] `}>
+                        Hola  ¿Qué tal? Espero que te encuentres muy bien. { loading? 'Estamos generando ': 'Generamos '} algunas ideas para que puedas empezar a crear contenido. 
+                        <br/>Lo bueno de este proceso es que puedes cambiar las ideas que te parezcan más interesantes, editarlas, eliminarlar o generar más. <br/>{ loading? 'No tardaremos mucho...': '¡Vamos!'}
+                    </p>
+                </div>
+            </div>
+            }
+            <ul className={`flex flex-col md:flex-wrap md:flex-row items-center justify-center md:justify-items-center last:mb-14 ${loading? 'animate-pulse pointer-events-none': ''} `}>
                 {
                     listIdeas.map((item, index) => (
-                        <li key={index} className='m-4 mb-2 w-[330px]'>
-                            <div className='flex relative'>
-                                <div className='bg-[#F2F2F2] w-[80%] rounded-t-[2.8rem] h-[55px]'></div>
-                                <button className=' absolute right-0 top-1 border-[10px] border-white text-[#0D0D0D] w-min-[20%] rounded-bl-[1rem] min-h-full'><p className=' p-2 px-4 rounded-2xl bg-[#5CF2AC] '>{'<-'}</p></button>
-                            </div>
-                            <div className='bg-[#F2F2F2] py-3 rounded-b-[3rem] rounded-tr-3xl'>
-                                <h2 className={`px-8 mt-2 pb-2 font-semibold text-xl ${loading? 'opacity-30':''}`}>{item.title.length > 60 ? item.title.slice(0, 60) + '...' : item.title}</h2>
-                                <p className={`px-8 pb-6 text-[#0D0D0D]/70 ${loading? 'opacity-30':''}`}>{item.description.length > 70 ? item.description.slice(0, 70) + '. ' : item.description} 
-                                    <button type={'button'} onClick={ ()=>{ navigateTo(item.id) }}><span className='text-[#797FF2] text-sm cursor-pointer'>Ver más...</span></button>
-                                </p>
-                            </div>
-                        </li>
+                        <PreviewIdea key={index} idea={item} loading={loading} navigate={navigateTo}></PreviewIdea>
                     ))
                 }
             </ul>

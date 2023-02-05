@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SettingsContext } from '../context/settingsContext';
+import IconArrow from '../components/icons/IconArrow';
 
 const profile = {
     streamer: {
@@ -21,7 +22,7 @@ const profile = {
     }
 }
 
-const Inicio = () => {
+const StartedPage = () => {
 
     const [selectedProfile, setSelectedProfile] = useState('');
     const [listFocus, setListFocus] = useState([]);
@@ -64,7 +65,7 @@ const Inicio = () => {
     return (
         <div className='flex flex-col justify-center items-center h-screen'>
             <div className='w-[80%] md:w-[40%] lg:w-1/3'>
-                <h1 className={`${select? 'text-2xl':'text-4xl'} font-semibold transition-all duration-100 `}>Genere contenido colaborando con una IA adaptada a tu perfil.</h1>
+                <h1 className={`${select? 'text-2xl':'text-4xl'} font-semibold transition-all duration-200 `}>Genere contenido colaborando con una IA adaptada a tu perfil.</h1>
                 <div className='mt-5 flex justify-between'>
                     <select className='bg-[#F2F2F2] p-2 rounded-lg w-[80%] lg:w-[85%] appearance-none outline-none' onChange={handleChange}>
                         <option value=''>Selecciona un perfil</option>
@@ -73,7 +74,7 @@ const Inicio = () => {
                         <option value='youtuber'>Youtuber</option>
                         <option value='blogger'>Blogger</option>
                     </select>
-                    <button className={`bg-[#5CF2AC] ml-2 px-3 py-2 font-bold text-xl rounded-lg transition-all duration-200 ${select ?  'bg-[#5CF2AC]': 'rotate-180'} ${error? 'bg-red-400':''}`} onClick={ ()=>{ continueTo() } }>{'->'}</button>
+                    <button className={`bg-[#5CF2AC] ml-2 px-3 py-2 font-bold text-xl rounded-lg transition-all duration-200 ${select ?  'bg-[#5CF2AC]': 'rotate-180'} ${error? 'bg-red-400':''}`} onClick={ ()=>{ continueTo() } }><IconArrow></IconArrow></button>
                 </div>
                 {
                     select && ( 
@@ -97,4 +98,4 @@ const Inicio = () => {
     );
 }
 
-export default Inicio;
+export default StartedPage;
