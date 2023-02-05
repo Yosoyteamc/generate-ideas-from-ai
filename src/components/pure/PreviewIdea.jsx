@@ -7,7 +7,7 @@ const PreviewIdea = ({idea, index, loading, navigate}) => {
     const [maximize, setMaximize] = useState(false);
 
     return (
-        <li key={index} className='m-4 mb-2 w-[330px]'>
+        <li id={'idea'+index} className='m-4 mb-2 w-[330px]'>
             <div className='flex relative'>
                 <div className='bg-[#F2F2F2] w-[80%] rounded-t-[2.8rem] h-[55px]'></div>
                 <button className=' absolute right-0 top-1 border-[10px] border-white text-[#0D0D0D] w-min-[20%] rounded-bl-[1rem] min-h-full' onClick={ ()=>{ navigate(idea.id) } }><div className=' p-2 px-4 rounded-2xl bg-[#5CF2AC] hover:bg-[#6638A6] transition-colors duration-500'><IconArrow className='-rotate-45'></IconArrow></div></button>

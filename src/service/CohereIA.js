@@ -130,14 +130,15 @@ async function detectLanguage(input){
 
 }
 
-export async function createOneSuggestion(position) {
+export async function createOneSuggestion(position, settings) {
+    const { profile, preferences} = settings;
     console.log('creating one suggestion...');
-    const suggestionsTitlesArray = await generateListOfTitles();
+    const suggestionsTitlesArray = await generateListOfTitles(profile, preferences);
     const suggestion = suggestionsTitlesArray[0];
     const language = await detectLanguage(suggestion);
 
-    const description = await generateDescription(suggestion);
-    const hashtags = await generateHashTags(suggestion);
+    const description = await generateDescription(suggestion, profile, preferences);
+    const hashtags = await generateHashTags(suggestion, profile, preferences);
 
     const title = suggestion.matchAll(':')?
                   suggestion.replace(/\d+./g,'').split(':') : 
@@ -165,12 +166,12 @@ export async function createSuggestions({ profile, preferences}) {
     console.log('creating suggestions...');
 
     const suggestionsTitlesArray = await generateListOfTitles(profile, preferences);
-    console.log(suggestionsTitlesArray);
+    // console.log(suggestionsTitlesArray);
     const languageArray = await Promise.all(suggestionsTitlesArray.map(async (title) => {
         return await detectLanguage(title);
     }));
     const suggestionDescriptionsArray = await Promise.all(suggestionsTitlesArray.map(async (title) => {
-        return await generateDescription(title);
+        return await generateDescription(title, profile, preferences[0]);
     })); 
     const suggestionsHashTagsArray = await Promise.all(suggestionsTitlesArray.map(async (title) => {
         return await generateHashTags(title, profile, preferences[0]);

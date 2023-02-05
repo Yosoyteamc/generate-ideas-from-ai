@@ -1,9 +1,9 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import IconSearch from '../components/icons/IconSearch';
-import IconSettings from '../components/icons/IconSettings';
-import IconNotification from '../components/icons/IconNotification';
-import IconMenu from '../components/icons/IconMenu';
+// import IconSearch from '../components/icons/IconSearch';
+// import IconSettings from '../components/icons/IconSettings';
+// import IconNotification from '../components/icons/IconNotification';
+// import IconMenu from '../components/icons/IconMenu';
 
 
 const MainPage = () => {

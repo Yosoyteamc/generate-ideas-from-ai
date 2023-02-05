@@ -12,7 +12,7 @@ const profile = {
         ]
     },
     instragramer: {
-        tags: []
+        tags: ['moda y estilo', 'fitness', 'viajes', 'comida', 'belleza', 'mascotas', 'educación', 'entretenimiento', 'deportes', 'comedia', 'música', 'animales', 'humor']
     },
     youtuber: {
         tags: []
@@ -85,7 +85,7 @@ const StartedPage = () => {
                                     profile[selectedProfile].tags.map( (tag, index) => (
                                         <li key={index} className='inline'>
                                             <input className='absolute opacity-0 peer' type="checkbox" id={`checkbox${index}`} onChange={ setOnList } value={tag}/>
-                                            <label className='cursor-pointer py-1 px-2 inline-block bg-[#5CF2AC]/20 rounded-md mx-1 whitespace-nowrap my-[3px] select-none transition-all peer-checked:bg-[#5CF2AC] duration-100' htmlFor={`checkbox${index}`}>{tag}</label>
+                                            <label className='cursor-pointer capitalize py-1 px-2 inline-block bg-[#5CF2AC]/20 rounded-md mx-1 whitespace-nowrap my-[3px] select-none transition-all peer-checked:bg-[#5CF2AC] duration-100' htmlFor={`checkbox${index}`}>{tag}</label>
                                         </li>
                                     ))
                                 }
