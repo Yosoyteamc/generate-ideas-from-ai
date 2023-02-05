@@ -8,7 +8,7 @@ import { SettingsContextProvider } from './context/settingsContext'
 function App() {
   return (
     <SettingsContextProvider>
-      <BrowserRouter basename='/hot-ideas'>
+      <BrowserRouter basename='/generate-ideas-from-ai'>
         <Routes>
           <Route index path="/" element={<StartedPage></StartedPage>} />
             <Route path='main' element={<MainPage></MainPage>}>
