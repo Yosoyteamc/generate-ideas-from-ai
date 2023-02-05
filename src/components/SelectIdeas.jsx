@@ -109,7 +109,7 @@ const SelectIdeas = () => {
                     <h2 className={`px-8 mt-2 pb-2 font-semibold text-3xl`}>Bienvenido</h2>
                     <p className={`px-8 pb-6 text-[#0D0D0D] `}>
                         Hola  ¿Qué tal? Espero que te encuentres muy bien. { loading? 'Estamos generando ': 'Generamos '} algunas ideas para que puedas empezar a crear contenido. 
-                        <br/>Lo bueno de este proceso es que puedes cambiar las ideas que te parezcan más interesantes, editarlas, eliminarlar o generar más. <br/>{ loading? 'No tardaremos mucho...': '¡Vamos!'}
+                        <br/>Lo bueno de este proceso es que puedes guardar las ideas que te parezcan más interesantes, editarlas, eliminarlar o generar más. <br/>{ loading? 'No te preocupes, no tardaremos mucho...': '¡Vamos!'}
                     </p>
                 </div>
             </div>
