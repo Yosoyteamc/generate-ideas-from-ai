@@ -5,6 +5,7 @@ import { SettingsContext } from '../context/settingsContext';
 import PreviewIdea from './pure/PreviewIdea';
 import IconCreate from './icons/IconCreate';
 import IconArrow from './icons/IconArrow';
+import IconSearch from './icons/IconSearch';
 
 const listDefault = [
     {
@@ -68,12 +69,14 @@ const listDefault = [
 const SelectIdeas = () => {
 
     const [loading, setLoading] = useState(true);
+    const [loadingOneIdea, setLoadingOneIdea] = useState(false);
     // const [logged, setLogged] = useState(false);
     const [closeMessage, setCloseMessage] = useState(false);
     const [listIdeas, setListIdeas] = useState(listDefault);
     const { settings, setSettings } = useContext(SettingsContext);
     const [showNotification, setShowNotification] = useState(false);
     const welcomeMessage = useRef();
+    const inputSearch = useRef();
     // const notificationMessage = useRef();
     const navigate = useNavigate();
 
@@ -84,7 +87,7 @@ const SelectIdeas = () => {
     useEffect(() => {
         !loading && setTimeout(() => {
             setCloseMessage(true);
-        }, 5000);
+        }, 3000);
     }, [loading]);
 
     const navigateTo = (id) => {
@@ -114,11 +117,13 @@ const SelectIdeas = () => {
 
     const obtainNewElement = async () => {
         try {
+            setLoadingOneIdea(true);
             const response = await createOneSuggestion( listIdeas.length+1, settings);
             const newList = [...listIdeas, response];
             setListIdeas(newList);
             saveData(newList, settings);
             setShowNotification(true);
+            setLoadingOneIdea(false);
         } catch (error) {
             console.log(error);
         }
@@ -131,9 +136,20 @@ const SelectIdeas = () => {
         return  'slide-out-top'
     }
 
+    const searchIdea = (e) => {
+        e.preventDefault();
+        // console.log(newList);
+    }
+
     return (
         <div className={`w-screen p-5 relative max-w-[1200px] flex flex-col items-center`}>
-            <div ref={welcomeMessage} className={`mb-2 w-[330px] ${closeMessage? closedWhitAnimation():'' }`}>
+            <div className='w-full mb-10'>
+                <form className='flex bg-[#F2F2F2] items-center rounded-lg px-4' onSubmit={searchIdea}>
+                    <IconSearch width={24} height={24}></IconSearch>
+                    <input ref={inputSearch} className='text-[#0D0D0D] bg-transparent p-3 rounded-lg w-full appearance-none outline-none' type='text' placeholder='Buscar ideas...'/> 
+                </form>
+            </div>
+            <div ref={welcomeMessage} className={`mb-2 w-[330px] z-0 relative ${closeMessage? closedWhitAnimation():'' }`}>
                 <div className='flex relative'>
                     <div className='bg-[#5CF2AC] w-[80%] rounded-t-[2.8rem] h-[55px]'></div>
                     <button className='absolute right-[-5px] top-0 border-[10px] border-white text-[#0D0D0D] w-min-[20%] rounded-bl-[1rem]' onClick={()=>{setCloseMessage(!closeMessage)}}><div className='py-[.8rem] px-[1.2rem] rounded-2xl  bg-[#5CF2AC] hover:bg-[#6638A6] transition-colors duration-500'><IconCreate className='-rotate-45 ml-1 scale-110'></IconCreate></div></button>
@@ -148,15 +164,16 @@ const SelectIdeas = () => {
             </div>
             {
                 !loading && closeMessage &&              
-                <div className='mb-8 slide-in-top flex flex-col items-start sm:items-center'>
+                <div className='mb-2 slide-in-top flex flex-col items-start sm:items-center relative z-0'>
                     <h2 className={`${listIdeas.length < 9? 'md:text-5xl leading-[1.2] text-[2.8rem]': 'md:text-[1.3] leading-[3.1rem] text-[2.7rem]' } font-semibold mb-6`}>Ideas generadas {`(${listIdeas.length})`}</h2>
-                    <button className='bg-[#5CF2AC] text-[#0D0D0D] px-4 py-2 rounded-2xl hover:bg-[#6638A6] transition-colors duration-500 flex items-center' onClick={obtainNewElement}>
-                        <IconCreate className='mr-2'></IconCreate>Generar otra idea
+                    <button className={`bg-[#5CF2AC] text-[#0D0D0D] px-4 py-2 rounded-2xl hover:bg-[#6638A6] transition-colors duration-500 flex items-center ${loadingOneIdea? 'pointer-events-none': 'pointer-events-auto'}`} onClick={obtainNewElement}>
+                        <IconCreate className={`mr-2 ${loadingOneIdea? 'animate-spin scale-75':''}`}></IconCreate>
+                        { loadingOneIdea? 'Procesando...':'Generar otra idea'}
                     </button>
                 </div>
             }
             <ul className={`flex flex-col md:flex-wrap md:flex-row items-center justify-center md:justify-items-center last:mb-14 ${loading? 'animate-pulse pointer-events-none': ''} `}>
-                {
+                {   
                     listIdeas.map((item, index) => (
                         <PreviewIdea key={index} index={index} idea={item} loading={loading} navigate={navigateTo}></PreviewIdea>
                     ))
