@@ -134,7 +134,9 @@ export async function createOneSuggestion(position, settings) {
     const { profile, preferences} = settings;
     console.log('creating one suggestion...');
     const suggestionsTitlesArray = await generateListOfTitles(profile, preferences);
-    const suggestion = suggestionsTitlesArray[0];
+    const randomIndex = Math.floor(Math.random() * suggestionsTitlesArray.length);
+    console.log('randomIndex', randomIndex);
+    const suggestion = suggestionsTitlesArray[randomIndex];
     const language = await detectLanguage(suggestion);
 
     const description = await generateDescription(suggestion, profile, preferences);

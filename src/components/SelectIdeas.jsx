@@ -92,7 +92,7 @@ const SelectIdeas = () => {
     }, [loading]);
 
     const navigateTo = (id) => {
-        navigate('/main/idea/' + id);
+        navigate('/main/idea/' + id, { state: id});
     }
 
     const obtainData = async () => {
@@ -127,6 +127,7 @@ const SelectIdeas = () => {
             setLoadingOneIdea(false);
         } catch (error) {
             console.log(error);
+            setLoadingOneIdea(false);
         }
     }
 
@@ -166,9 +167,7 @@ const SelectIdeas = () => {
                 <ul className='px-3 flex justify-center flex-col'>
                     {
                         listIdeasFilter.map((idea) => (
-                            <li key={idea.id} className='mb-4'>
-                                <PreviewIdea idea={idea} navigateTo={navigateTo}></PreviewIdea>
-                            </li>
+                                <PreviewIdea key={idea.id} className='mb-4' idea={idea} navigateTo={navigateTo}></PreviewIdea>
                         ))
                     }
                     <button className='mb-10 text-[#0d0d0d]/60 animate-pulse' onClick={()=>{setListIdeasFilter([])}}>Eliminar busqueda...</button>
