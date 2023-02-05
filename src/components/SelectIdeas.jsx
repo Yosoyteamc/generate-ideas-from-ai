@@ -73,6 +73,7 @@ const SelectIdeas = () => {
     // const [logged, setLogged] = useState(false);
     const [closeMessage, setCloseMessage] = useState(false);
     const [listIdeas, setListIdeas] = useState(listDefault);
+    const [listIdeasFilter, setListIdeasFilter] = useState([]);
     const { settings, setSettings } = useContext(SettingsContext);
     const [showNotification, setShowNotification] = useState(false);
     const welcomeMessage = useRef();
@@ -138,7 +139,18 @@ const SelectIdeas = () => {
 
     const searchIdea = (e) => {
         e.preventDefault();
-        // console.log(newList);
+        const value = inputSearch.current.value;
+        const newList = listIdeas.filter((idea) => {
+            return idea.title.includes(value.toLowerCase()) || idea.description.includes(value.toLowerCase()) ;
+        });
+        newList.length === 0 && (()=>{
+            inputSearch.current.parentNode.style.border = '1px solid #F25A44';
+            setTimeout(() => {
+                inputSearch.current.parentNode.style.border = '1px solid #F2F2F2';
+            }, 2000);
+        })();
+        setListIdeasFilter(newList);
+        inputSearch.current.value = '';
     }
 
     return (
@@ -149,6 +161,19 @@ const SelectIdeas = () => {
                     <input ref={inputSearch} className='text-[#0D0D0D] bg-transparent p-3 rounded-lg w-full appearance-none outline-none' type='text' placeholder='Buscar ideas...'/> 
                 </form>
             </div>
+            {
+                listIdeasFilter.length > 0 && 
+                <ul className='px-3 flex justify-center flex-col'>
+                    {
+                        listIdeasFilter.map((idea) => (
+                            <li key={idea.id} className='mb-4'>
+                                <PreviewIdea idea={idea} navigateTo={navigateTo}></PreviewIdea>
+                            </li>
+                        ))
+                    }
+                    <button className='mb-10 text-[#0d0d0d]/60 animate-pulse' onClick={()=>{setListIdeasFilter([])}}>Eliminar busqueda...</button>
+                </ul>
+            }
             <div ref={welcomeMessage} className={`mb-2 w-[330px] z-0 relative ${closeMessage? closedWhitAnimation():'' }`}>
                 <div className='flex relative'>
                     <div className='bg-[#5CF2AC] w-[80%] rounded-t-[2.8rem] h-[55px]'></div>
