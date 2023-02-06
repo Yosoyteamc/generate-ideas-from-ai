@@ -10,8 +10,8 @@ const IconCreate = (props) => (
   >
     <path
       d="M1 7h12m-6 6V1"
-      stroke="#000"
-      strokeWidth={1.5}
+      stroke={props.stroke || '#000'}
+      strokeWidth={props.strokeWidth || 1.5}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
