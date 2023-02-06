@@ -1,26 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import IconChangeSuggestion from './icons/IconChangePosition';
-import { set } from 'date-fns';
 import { SettingsContext } from '../context/settingsContext';
-
-const profile = {
-    streamer: {
-        tags: [
-            'Juegos', 'Competencia de juegos','Just Chatting', 'Música', 'Comentarista de deportes',
-            'Desarrollo de videojuegos',
-            'Desarrollo de aplicaciones web'
-        ]
-    },
-    instragramer: {
-        tags: ['moda y estilo', 'fitness', 'viajes', 'comida', 'belleza', 'mascotas', 'educación', 'entretenimiento', 'deportes', 'comedia', 'música', 'animales', 'humor']
-    },
-    youtuber: {
-        tags: []
-    },
-    blogger: {
-        tags: []
-    }
-}
+import { profile } from '../constants/dataPerDefault';
 
 
 const Settings = () => {
@@ -29,12 +10,8 @@ const Settings = () => {
     const [newProfile, setNewProfile] = useState('');
     const [listFocus, setListFocus] = useState([]);
     const {setting, setSettings} = useContext(SettingsContext);
-    // const [select, setSelect] = useState(false);
     const [error, setError] = useState(false);
-    
     const [save , setSave] = useState(false);
-
-    // ?error && listFocus.length > 0 && newProfile !== 'default' && newProfile !== selectedProfile && selectedProfile !== 'default')
 
     const handleChange = (e) => {
         setNewProfile(e.target.value);

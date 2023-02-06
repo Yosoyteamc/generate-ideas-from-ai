@@ -111,14 +111,14 @@ const ShowIdea = () => {
 
     return (
         <div className={`m-4 w-[330px] mb-24 ${loadingOneIdeas? 'pointer-events-none': 'pointer-events-auto'}`}>
-            <div className={`flex relative ${loadingOneIdeas? 'animate-pulse':''}`}>
+            <div className={`flex relative  ${loadingOneIdeas? 'animate-pulse':''}`}>
                 <div className='bg-[#F2F2F2] w-[80%] rounded-t-[2.8rem] h-[55px]'></div>
                 <button className=' absolute right-0 top-1 border-[10px] border-white text-[#0D0D0D] w-min-[20%] rounded-bl-[1rem] min-h-full' onClick={navigateToMain}>
-                    <div className=' p-2 px-4 rounded-2xl bg-[#5CF2AC] hover:bg-[#6638A6] transition-colors duration-500'>
+                    <div className=' p-2 px-4 rounded-2xl shadow bg-[#5CF2AC] hover:bg-[#6638A6] transition-colors duration-500'>
                         <IconArrow className='rotate-[135deg]'></IconArrow>
                     </div></button>
             </div>
-            <div className={`bg-[#F2F2F2] py-3 rounded-b-[3rem] rounded-tr-3xl ${loadingOneIdeas? 'animate-pulse':''}`}>
+            <div className={`bg-[#F2F2F2] py-3 shadow rounded-b-[3rem] rounded-tr-3xl ${loadingOneIdeas? 'animate-pulse':''}`}>
                 <span className='px-8 text-lg text-[#797FF2]'>Tiempo de generación: </span>
                 <p className='px-8 mb-4 mt-2'>
                     {date}
@@ -155,7 +155,7 @@ const ShowIdea = () => {
             {
                 showNotification &&
                 <div className='fixed w-screen bottom-0 left-0 flex justify-center'>
-                <a className='bg-[#F25A44] animate-bounce text-center w-[250px] text-[#0D0D0D] font-medium mb-20 px-4 py-2 rounded-2xl hover:bg-[#6638A6] transition-colors duration-500' onClick={()=>{
+                <a className='bg-[#F25A44] animate-bounce text-center w-[250px] text-[#0D0D0D] font-medium mb-20 px-4 py-2 rounded-2xl hover:bg-[#F25A44]/80 transition-colors duration-500' onClick={()=>{
                     setShowNotification(false);
                     removeIdea(idea?.id);
                 }} >

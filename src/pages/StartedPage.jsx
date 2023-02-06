@@ -2,25 +2,8 @@ import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SettingsContext } from '../context/settingsContext';
 import IconArrow from '../components/icons/IconArrow';
+import { profile } from '../constants/dataPerDefault';
 
-const profile = {
-    streamer: {
-        tags: [
-            'Juegos', 'Competencia de juegos','Just Chatting', 'Música', 'Comentarista de deportes',
-            'Desarrollo de videojuegos',
-            'Desarrollo de aplicaciones web'
-        ]
-    },
-    instragramer: {
-        tags: ['moda y estilo', 'fitness', 'viajes', 'comida', 'belleza', 'mascotas', 'educación', 'entretenimiento', 'deportes', 'comedia', 'música', 'animales', 'humor']
-    },
-    youtuber: {
-        tags: []
-    },
-    blogger: {
-        tags: []
-    }
-}
 
 const StartedPage = () => {
 

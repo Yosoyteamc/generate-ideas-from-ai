@@ -60,7 +60,7 @@ const MainPage = () => {
     }
 
     return (
-        <section className='flex flex-col items-center relative'>
+        <section className='flex flex-col items-center relative overflow-hidden'>
             <header className='border-b bg-white border-[#f2f2f2] w-screen z-100 relative'>
                 <nav className='px-6  py-4'>
                     <ul className='flex justify-between items-center'>
