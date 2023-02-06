@@ -5,6 +5,7 @@ import MainPage from './pages/MainPage'
 import SelectIdeas from './components/SelectIdeas'
 import { SettingsContextProvider } from './context/settingsContext'
 import ShowIdea from './components/ShowIdea'
+import Settings from './components/Settings'
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
             <Route path='main' element={<MainPage></MainPage>}>
               <Route index element={<SelectIdeas></SelectIdeas>}/>
               <Route path='idea/:id' element={<ShowIdea></ShowIdea>} />
+              <Route path='settings' element={<Settings></Settings>} />
+              <Route path='*' element={<h1>404</h1>} />
             </Route>
           <Route path="*" element={<h1>404</h1>} />
         </Routes>

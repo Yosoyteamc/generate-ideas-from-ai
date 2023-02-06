@@ -99,7 +99,7 @@ async function generateHashTags(title, profile, preferences){
         body: JSON.stringify(data)
     }).then(res => res.json());
 
-    const hashtags = response?.generations[0].text;
+    const hashtags = response?.generations[0]?.text;
 
     return Array.from(new Set(hashtags
         .replaceAll(/\d/g,'').replaceAll('\n','').replaceAll('"','').replaceAll(`'`,'').replaceAll('.','').split('#')
@@ -132,15 +132,16 @@ async function detectLanguage(input){
 
 export async function createOneSuggestion(position, settings) {
     const { profile, preferences} = settings;
+    const randomPreference = preferences[Math.floor(Math.random() * preferences.length)];
     console.log('creating one suggestion...');
-    const suggestionsTitlesArray = await generateListOfTitles(profile, preferences);
+    const suggestionsTitlesArray = await generateListOfTitles(profile, randomPreference);
     const randomIndex = Math.floor(Math.random() * suggestionsTitlesArray.length);
     console.log('randomIndex', randomIndex);
     const suggestion = suggestionsTitlesArray[randomIndex];
     const language = await detectLanguage(suggestion);
 
-    const description = await generateDescription(suggestion, profile, preferences);
-    const hashtags = await generateHashTags(suggestion, profile, preferences);
+    const description = await generateDescription(suggestion, profile, randomPreference);
+    const hashtags = await generateHashTags(suggestion, profile, randomPreference);
 
     const title = suggestion.matchAll(':')?
                   suggestion.replace(/\d+./g,'').split(':') : 
@@ -151,7 +152,7 @@ export async function createOneSuggestion(position, settings) {
     return {
         id: uuidv4(),
         title: title,
-        type: `${profile} de ${preferences}`,
+        type: `${profile} de ${randomPreference}`,
         description,
         hashtags,
         position,
@@ -167,16 +168,18 @@ export async function createSuggestions({ profile, preferences}) {
 
     console.log('creating suggestions...');
 
+    const randomIndex = Math.floor(Math.random() * preferences.length);
+
     const suggestionsTitlesArray = await generateListOfTitles(profile, preferences);
     // console.log(suggestionsTitlesArray);
     const languageArray = await Promise.all(suggestionsTitlesArray.map(async (title) => {
         return await detectLanguage(title);
     }));
     const suggestionDescriptionsArray = await Promise.all(suggestionsTitlesArray.map(async (title) => {
-        return await generateDescription(title, profile, preferences[0]);
+        return await generateDescription(title, profile, preferences[randomIndex]);
     })); 
     const suggestionsHashTagsArray = await Promise.all(suggestionsTitlesArray.map(async (title) => {
-        return await generateHashTags(title, profile, preferences[0]);
+        return await generateHashTags(title, profile, preferences[randomIndex]);
     }));
 
     // language === 'es' ? null : suggestionsTitlesArray = await translateArrayText(suggestionsTitlesArray).then(
@@ -190,7 +193,7 @@ export async function createSuggestions({ profile, preferences}) {
             suggestion.replace(/\d+./g,'');
         
         const description = suggestionDescriptionsArray[index];
-        const hashtags = suggestionsHashTagsArray[index] || [`#${profile}`, `#${preferences[0]}`];
+        const hashtags = suggestionsHashTagsArray[index] || [`#${profile}`, `#${preferences[randomIndex]}`];
         const language = languageArray[index];
         
         const date = new Date().getTime();
@@ -198,7 +201,7 @@ export async function createSuggestions({ profile, preferences}) {
         return {
             id: uuidv4(),
             title: title[0],
-            type: `${profile} de ${preferences}`,
+            type: `${profile} de ${preferences[randomIndex]}`,
             description,
             hashtags,
             position: index + 1,

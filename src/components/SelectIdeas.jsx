@@ -99,6 +99,7 @@ const SelectIdeas = () => {
         try {
             const response = JSON.parse(localStorage.getItem('data')) || await createSuggestions(settings);
             setListIdeas(response?.userList || response);
+
             response && setLoading(false);
             // response?.userList && setCloseMessage(true);
 
@@ -106,6 +107,7 @@ const SelectIdeas = () => {
             setSettings(response?.settings);
         } catch (error) {
             console.log(error);
+            
         }
     }
 
@@ -118,13 +120,13 @@ const SelectIdeas = () => {
 
     const getUserSettings = () => {
         const userSettings = JSON.parse(localStorage.getItem('data'))?.settings;
-        setSettings(userSettings);
+        userSettings && setSettings(userSettings);
     }
 
     const obtainNewElement = async () => {
         try {
             setLoadingOneIdea(true);
-            getUserSettings();
+            // getUserSettings();
             const response = await createOneSuggestion( listIdeas.length+1, settings);
             const newList = [...listIdeas, response];
             setListIdeas(newList);
