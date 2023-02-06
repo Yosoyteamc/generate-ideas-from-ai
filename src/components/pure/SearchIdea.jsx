@@ -34,7 +34,7 @@ const SearchIdea = ({listIdeas}) => {
     return (
         <>
             <div className='w-full mb-10'>
-                <form className='flex shadow bg-[#F2F2F2] items-center rounded-lg px-4' onSubmit={searchIdea}>
+                <form className='flex bg-[#F2F2F2] items-center rounded-lg px-4' onSubmit={searchIdea}>
                     <IconSearch width={24} height={24}></IconSearch>
                     <input ref={inputSearch} className='text-[#0D0D0D] bg-transparent p-3 rounded-lg w-full appearance-none outline-none' type='text' placeholder='Buscar ideas...'/> 
                 </form>

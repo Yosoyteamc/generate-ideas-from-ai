@@ -9,7 +9,6 @@ import IdeasCount from './pure/IdeasCount';
 import WelcomeMessage from './pure/WelcomeMessage';
 import { listDefault } from '../constants/dataPerDefault';
 
-
 const SelectIdeas = () => {
 
     const [loading, setLoading] = useState(true);
@@ -78,7 +77,7 @@ const SelectIdeas = () => {
     return (
         <div className={`w-screen p-5 relative max-w-[1200px] flex flex-col items-center`}>
             <SearchIdea listIdeas={listIdeas}></SearchIdea>
-            <WelcomeMessage closeMessage={closeMessage} welcomeMessage={welcomeMessage} loading={loading}></WelcomeMessage>
+            <WelcomeMessage closeMessage={closeMessage} setCloseMessage={setCloseMessage} loading={loading}></WelcomeMessage>
             { !loading && closeMessage && <IdeasCount listIdeas={listIdeas} loadingOneIdea={loadingOneIdea} obtainNewElement={obtainNewElement}></IdeasCount> }
             <ul className={`flex flex-col md:flex-wrap md:flex-row items-center justify-center md:justify-items-center last:mb-14 ${loading? 'animate-pulse pointer-events-none': ''} `}>
                 {   listIdeas.map((item, index) => ( <PreviewIdea key={index} index={index} idea={item} loading={loading} navigate={navigateTo}></PreviewIdea>)) }
