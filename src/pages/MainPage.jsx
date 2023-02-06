@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 // import IconSearch from '../components/icons/IconSearch';
 // import IconSettings from '../components/icons/IconSettings';
 import IconNotification from '../components/icons/IconNotification';
@@ -11,30 +11,50 @@ const iconReference = 30;
 const MainPage = () => {
 
     const [showMenu, setShowMenu] = useState(false);
-    const [favorites, setFavorites] = useState(1);
+    const [ideas , setIdeas] = useState(0);
+    const [favorites, setFavorites] = useState(0);
+    const location = useLocation();
+    // console.log(location);
 
     const navigate = useNavigate(); 
 
     useEffect(() => {
         showMenu && obtainFavorites();
     }, [showMenu]);
+        
 
     const obtainFavorites = () => {
-        const response = JSON.parse(localStorage.getItem('data'));
-        const userList = response?.userList;
-        const favorites = userList.reduce((acc, item) => {
-            if(item.isFavorite){
-                acc++;
+        try{
+            const response = JSON.parse(localStorage.getItem('data'));
+            
+            if(!response){
+                return;
             }
-            return acc;
-        }, 0);
 
-        setFavorites(favorites);
+            const userList = response?.userList;
+            const favorites = userList.reduce((acc, item) => {
+                if(item.isFavorite){
+                    acc++;
+                }
+                return acc;
+            }, 0);
+
+            setIdeas(userList.length);
+            setFavorites(favorites);
+        }
+        catch(e){
+            // console.log(e);
+        }
     }
 
     const navigateTo = (path) => {
-        localStorage.clear('data');
         navigate(path);
+        setShowMenu(false);
+    }
+
+    const navigateToStarted = () => {
+        localStorage.clear('data');
+        navigate('/');
     }
 
     return (
@@ -52,9 +72,10 @@ const MainPage = () => {
                         <div className='cursor-pointer' onClick={()=>{setShowMenu(!showMenu)}}><IconCreate className='scale-[1.75] rotate-45 relative top-5' strokeWidth={1} width={iconReference} height={iconReference} color={'#0D0D0D'}/></div>
                     </div>
                     <ul className='px-8 mt-10 flex flex-col gap-5 text-4xl font-medium'>
+                        { location.pathname.includes('/main/idea/') && <li className=' cursor-pointer hover:text-[#6638A6]' onClick={()=>navigateTo('/main')}>Ver ideas {`(${ideas})`}</li>}
                         <li className=' cursor-pointer hover:text-[#6638A6]'>Ver Favoritos {`(${favorites})`}</li>
                         <li className=' cursor-pointer hover:text-[#6638A6]'>Ajustes</li>
-                        <li className=' cursor-pointer hover:text-[#6638A6]' onClick={()=>navigateTo('/')}>Salir</li>
+                        <li className=' cursor-pointer hover:text-[#6638A6]' onClick={()=>navigateToStarted()}>Salir</li>
                     </ul>
                 </div>
             <Outlet></Outlet>

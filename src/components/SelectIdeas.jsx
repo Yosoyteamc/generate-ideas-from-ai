@@ -178,7 +178,7 @@ const SelectIdeas = () => {
                                 <PreviewIdea key={idea.id} className='mb-4' idea={idea} navigate={navigateTo}></PreviewIdea>
                         ))
                     }
-                    <button className='mb-10 text-[#0d0d0d]/60 animate-pulse' onClick={()=>{setListIdeasFilter([])}}>Eliminar busqueda...</button>
+                    <button className='mb-16 text-[#0d0d0d]/60 animate-pulse' onClick={()=>{setListIdeasFilter([])}}>Eliminar busqueda...</button>
                 </ul>
             }
             <div ref={welcomeMessage} className={`mb-2 w-[330px] z-0 relative ${closeMessage? closedWhitAnimation():'' }`}>
@@ -214,10 +214,11 @@ const SelectIdeas = () => {
             {
                 showNotification &&
                 <div className='fixed w-screen bottom-0 left-0 flex justify-center'>
-                <a className='bg-[#5CF2AC] animate-bounce text-[#0D0D0D] m-6 px-4 py-2 rounded-2xl hover:bg-[#6638A6] transition-colors duration-500 flex items-center' href={`#idea${listIdeas.length-1}`} onClick={()=>{
+                <a className='bg-[#5CF2AC] animate-bounce text-[#0D0D0D] m-12 px-4 py-2 rounded-2xl hover:bg-[#6638A6] transition-colors duration-500 flex items-center' href={`#idea${listIdeas.length-1}`} onClick={()=>{
                     setShowNotification(false);
+
                 }} >
-                    Tienes una idea nueva <IconArrow className='ml-2 rotate-90 scale-75'></IconArrow>
+                    ¡Tienes una nueva idea! <IconArrow className='ml-2 rotate-90 scale-75'></IconArrow>
                 </a>
             </div>
             }
