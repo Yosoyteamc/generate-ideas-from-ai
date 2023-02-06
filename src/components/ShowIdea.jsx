@@ -37,6 +37,10 @@ const ShowIdea = () => {
                 <h3 className='px-8 mb-4 mt-2'>
                     {idea?.date}
                 </h3>
+                <span className='px-8 text-lg text-[#797FF2]'>Tipo: </span>
+                <h3 className='px-8 mb-4 mt-2'>
+                    {idea?.type}
+                </h3>
                 <span className='px-8 text-lg text-[#797FF2]'>Titulo: </span>
                 <h2 className={`px-8 mt-2 pb-2 font-semibold text-2xl mb-3`}>
                     {idea?.title}

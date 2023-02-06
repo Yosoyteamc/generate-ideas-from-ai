@@ -146,9 +146,11 @@ const SelectIdeas = () => {
         });
         newList.length === 0 && (()=>{
             inputSearch.current.parentNode.style.border = '1px solid #F25A44';
+            // inputSearch.current.parentNode.classList.add('wobble-hor-bottom');
             setTimeout(() => {
                 inputSearch.current.parentNode.style.border = '1px solid #F2F2F2';
-            }, 2000);
+                // inputSearch.current.parentNode.classList.remove('wobble-hor-bottom');
+            }, 1500);
         })();
         setListIdeasFilter(newList);
         inputSearch.current.value = '';
@@ -167,7 +169,7 @@ const SelectIdeas = () => {
                 <ul className='px-3 flex justify-center flex-col'>
                     {
                         listIdeasFilter.map((idea) => (
-                                <PreviewIdea key={idea.id} className='mb-4' idea={idea} navigateTo={navigateTo}></PreviewIdea>
+                                <PreviewIdea key={idea.id} className='mb-4' idea={idea} navigate={navigateTo}></PreviewIdea>
                         ))
                     }
                     <button className='mb-10 text-[#0d0d0d]/60 animate-pulse' onClick={()=>{setListIdeasFilter([])}}>Eliminar busqueda...</button>

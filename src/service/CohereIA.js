@@ -151,7 +151,7 @@ export async function createOneSuggestion(position, settings) {
     return {
         id: uuidv4(),
         title: title,
-        type: 'Fashion profile',
+        type: `${profile} de ${preferences}`,
         description,
         hashtags,
         position,
@@ -198,7 +198,7 @@ export async function createSuggestions({ profile, preferences}) {
         return {
             id: uuidv4(),
             title: title[0],
-            type: 'Fashion profile',
+            type: `${profile} de ${preferences}`,
             description,
             hashtags,
             position: index + 1,
