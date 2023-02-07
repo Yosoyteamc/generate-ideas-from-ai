@@ -38,9 +38,9 @@ Los usuarios deben ser capaces de:
 ### Built with
 
 - Semantic HTML5 markup
-- CSS custom properties
-- Vite
+- ViteJS
 - ReactJS
+- TailwindCSS
 - Mobile-first workflow
 - Co:here API
 - TranslatorText API
