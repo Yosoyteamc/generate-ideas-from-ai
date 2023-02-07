@@ -75,7 +75,7 @@ const SelectIdeas = () => {
     }
 
     return (
-        <div className={`w-screen p-5 relative max-w-[1200px] flex flex-col items-center`}>
+        <div className={`w-screen p-5 relative max-w-[1200px] flex flex-col items-center lg:ml-[100px] `}>
             <SearchIdea listIdeas={listIdeas}></SearchIdea>
             <WelcomeMessage closeMessage={closeMessage} setCloseMessage={setCloseMessage} loading={loading}></WelcomeMessage>
             { !loading && closeMessage && <IdeasCount listIdeas={listIdeas} loadingOneIdea={loadingOneIdea} obtainNewElement={obtainNewElement}></IdeasCount> }

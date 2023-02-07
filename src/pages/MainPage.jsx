@@ -60,10 +60,10 @@ const MainPage = () => {
     }
 
     return (
-        <section className='flex flex-col items-center relative overflow-hidden'>
-            <header className='border-b bg-white border-[#f2f2f2] w-screen z-100 relative'>
-                <nav className='px-6  py-4'>
-                    <ul className='flex justify-between items-center'>
+        <section className='flex flex-col items-center relative overflow-hidden lg:flex-row lg:items-start'>
+            <header className='border-b bg-white border-[#f2f2f2] w-screen z-100 relative lg:w-[80px] lg:fixed  lg:border-r lg:h-full'>
+                <nav className='px-6  py-4 lg:h-screen lg:w-full'>
+                    <ul className='flex justify-between items-center lg:flex-col lg:justify-between lg:h-full lg:items-start'>
                         <li className='cursor-pointer' onClick={()=>{setShowMenu(!showMenu)}}><IconMenu width={iconReference} height={iconReference} color={'#0D0D0D'}/></li>
                         <li className='cursor-pointer relative' onClick={()=>{setShowNotification(!showNotification)}}>
                             { notificationActive && <div className='absolute animate-pulse bg-[#5CF2AC] w-3 h-3 right-0 top-[2px] rounded-full'></div>}
@@ -72,25 +72,25 @@ const MainPage = () => {
                     </ul>
                 </nav>
             </header>
-                <div className={`w-screen z-[999] h-screen fixed bg-white shadow-xl transition-all duration-400 ${showMenu? 'left-0':'-left-full'}`}>
-                    <div className='border-b bg-white border-[#f2f2f2 px-6 py-4 flex justify-end'>
-                        <div className='cursor-pointer' onClick={()=>{setShowMenu(!showMenu)}}><IconCreate className='scale-[1.75] rotate-45 relative top-5' strokeWidth={1} width={iconReference} height={iconReference} color={'#0D0D0D'}/></div>
-                    </div>
-                    <ul className='px-8 mt-10 flex flex-col gap-5 text-4xl font-medium'>
-                        { location.pathname.includes('/main/') && <li className=' cursor-pointer hover:text-[#6638A6]' onClick={()=>navigateTo('/main')}>Ver ideas {`(${ideas})`}</li>}
-                        <li className=' cursor-pointer hover:text-[#6638A6]'>Ver Favoritos {`(${favorites})`}</li>
-                        <li className=' cursor-pointer hover:text-[#6638A6]' onClick={()=>navigateTo('/main/settings')}>Ajustes</li>
-                        <li className=' cursor-pointer hover:text-[#6638A6]' onClick={()=>navigateToStarted()}>Salir</li>
-                    </ul>
+            <div className={`w-screen z-[999] h-screen fixed bg-white shadow-xl transition-all duration-400 ${showMenu? 'left-0':'-left-full'} lg:w-[25vw]`}>
+                <div className='border-b bg-white border-[#f2f2f2 px-6 py-4 flex justify-end'>
+                    <div className='cursor-pointer' onClick={()=>{setShowMenu(!showMenu)}}><IconCreate className='scale-[1.75] rotate-45 relative top-5' strokeWidth={1} width={iconReference} height={iconReference} color={'#0D0D0D'}/></div>
                 </div>
-                <div className={`w-screen z-[999] h-screen fixed bg-white shadow-xl transition-all duration-400 ${showNotification? 'right-0':'-right-full'}`}>
-                    <div className='border-b bg-white border-[#f2f2f2 px-6 py-4 flex justify-start'>
-                        <div className='cursor-pointer' onClick={()=>{setShowNotification(!showNotification)}}><IconCreate className='scale-[1.75] rotate-45 relative top-5' strokeWidth={1} width={iconReference} height={iconReference} color={'#0D0D0D'}/></div>
-                    </div>
-                    <ul className='px-8 mt-10 flex flex-col gap-5 text-lg'>
-                        <li className='cursor-pointer text-gray-400'>Aún no estan disponibles</li>
-                    </ul>
+                <ul className='px-8 mt-10 flex flex-col gap-5 text-4xl font-medium lg:text-3xl'>
+                    { location.pathname.includes('/main/') && <li className=' cursor-pointer hover:text-[#6638A6]' onClick={()=>navigateTo('/main')}>Ver ideas {`(${ideas})`}</li>}
+                    <li className=' cursor-pointer hover:text-[#6638A6]'>Ver Favoritos {`(${favorites})`}</li>
+                    <li className=' cursor-pointer hover:text-[#6638A6]' onClick={()=>navigateTo('/main/settings')}>Ajustes</li>
+                    <li className=' cursor-pointer hover:text-[#6638A6]' onClick={()=>navigateToStarted()}>Salir</li>
+                </ul>
+            </div>
+            <div className={`w-screen z-[999] h-screen fixed bg-white shadow-xl transition-all duration-400 ${showNotification? 'right-0 lg:left-0':'-right-full lg:-left-full'} lg:w-[25vw]`}>
+                <div className='border-b bg-white border-[#f2f2f2 px-6 py-4 flex justify-start lg:justify-end'>
+                    <div className='cursor-pointer' onClick={()=>{setShowNotification(!showNotification)}}><IconCreate className='scale-[1.75] rotate-45 relative top-5' strokeWidth={1} width={iconReference} height={iconReference} color={'#0D0D0D'}/></div>
                 </div>
+                <ul className='px-8 mt-10 flex flex-col gap-5 text-lg'>
+                    <li className='cursor-pointer text-gray-400'>Aún no estan disponibles</li>
+                </ul>
+            </div>
             <Outlet></Outlet>
         </section>
     );

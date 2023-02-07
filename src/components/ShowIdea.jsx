@@ -110,11 +110,11 @@ const ShowIdea = () => {
     }, [location.state]);
 
     return (
-        <div className={`m-4 w-[330px] mb-24 ${loadingOneIdeas? 'pointer-events-none': 'pointer-events-auto'}`}>
+        <div className={`m-4 w-[330px] lg:w-[500px] lg:ml-[100px] mb-24 ${loadingOneIdeas? 'pointer-events-none': 'pointer-events-auto'}`}>
             <div className={`flex relative  ${loadingOneIdeas? 'animate-pulse':''}`}>
                 <div className='bg-[#F2F2F2] w-[80%] rounded-t-[2.8rem] h-[55px]'></div>
-                <button className=' absolute right-0 top-1 border-[10px] border-white text-[#0D0D0D] w-min-[20%] rounded-bl-[1rem] min-h-full' onClick={navigateToMain}>
-                    <div className=' p-2 px-4 rounded-2xl bg-[#5CF2AC] hover:bg-[#6638A6] transition-colors duration-500'>
+                <button className=' absolute right-0 top-0 lg:top-[-1px] lg:right-[13px] border-[10px] border-white text-[#0D0D0D] w-min-[20%] rounded-bl-[1rem] min-h-full' onClick={navigateToMain}>
+                    <div className=' p-2 px-4 lg:px-6 rounded-2xl bg-[#5CF2AC] hover:bg-[#6638A6] transition-colors duration-500'>
                         <IconArrow className='rotate-[135deg]'></IconArrow>
                     </div></button>
             </div>
@@ -144,8 +144,8 @@ const ShowIdea = () => {
                     }
                 </ul>
             </div>
-            <div className='px-8  py-5 fixed right-0 bottom-0 w-full bg-white border-t border-[#f2f2f2]'>
-                <ul className='flex justify-between'>
+            <div className='px-8  py-5 fixed right-0 bottom-0 w-full bg-white border-t border-[#f2f2f2] lg:w-[80px] lg:h-screen lg:border-l lg:items-center'>
+                <ul className='flex justify-between lg:flex-col lg:h-full'>
                     <li className='cursor-pointer'><IconHeart width={iconReference} height={iconReference} fill={idea?.isFavorite? '#6638A6': 'none'} color={ idea?.isFavorite? '#6638A6' :'#0D0D0D'} onClick={ changeIsFavorite} /></li>
                     <li className='cursor-pointer'><IconEdit  width={iconReference} height={iconReference}  color={'#0D0D0D'}/></li>
                     <li className='cursor-pointer'><IconChange width={iconReference} height={iconReference} color={'#0D0D0D'}  onClick={()=>changeIdea(idea)}/></li>

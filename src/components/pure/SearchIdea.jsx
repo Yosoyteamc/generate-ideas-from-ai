@@ -47,7 +47,7 @@ const SearchIdea = ({listIdeas}) => {
                                 <PreviewIdea key={idea.id} className='mb-4' idea={idea} navigate={navigateTo}></PreviewIdea>
                         ))
                     }
-                    <button className='mb-16 text-[#0d0d0d]/60 animate-pulse' onClick={()=>{setListIdeasFilter([])}}>Eliminar busqueda...</button>
+                    <button className='mb-16 mt-5 text-[#0d0d0d]/60 animate-pulse' onClick={()=>{setListIdeasFilter([])}}>Eliminar busqueda...</button>
                 </ul>
             }
         </>

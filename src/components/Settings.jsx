@@ -62,7 +62,7 @@ const Settings = () => {
     }
 
     return (
-        <div className='w-screen'>
+        <div className='w-screen lg:ml-[100px]'>
             <div className='w-full px-6 py-3'>
                 <h1 className='text-2xl font-bold mb-3'>Configuraciones</h1>
                 <div className='rounded-lg my-3 bg-[#5CF2AC]/50'>
