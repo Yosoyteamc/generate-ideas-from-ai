@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { createOneSuggestion, createSuggestions } from '../service/CohereIA';
+import React, { useContext, useEffect /*useRef*/, useState } from 'react';
+import { createOneIdea, createIdeas } from '../service/CohereIA';
 import { useNavigate } from 'react-router-dom';
 import { SettingsContext } from '../context/settingsContext';
 import PreviewIdea from './pure/PreviewIdea';
@@ -17,10 +17,11 @@ const SelectIdeas = () => {
     const [listIdeas, setListIdeas] = useState(listDefault);
     const { settings, setSettings } = useContext(SettingsContext);
     const [showNotification, setShowNotification] = useState(false);
-    const welcomeMessage = useRef();
+    // const welcomeMessage = useRef();
     const navigate = useNavigate();
 
     useEffect(() => {
+        getUserSettings();
         obtainData();
     }, []);
 
@@ -36,13 +37,22 @@ const SelectIdeas = () => {
 
     const obtainData = async () => {
         try {
-            const response = JSON.parse(localStorage.getItem('data')) || await createSuggestions(settings);
-            setListIdeas(response?.userList || response);
-            response && setLoading(false);
-            saveData(response?.userList || response, response?.settings || settings);
-            setSettings(response?.settings);
+            
+            const response = JSON.parse(localStorage.getItem('data'))
+            if (!response) {
+                const response = await createIdeas(settings);
+                setListIdeas(response);
+                saveData(response, settings);
+            }
+            else {
+                saveData(response?.userList, response?.settings);
+                setListIdeas(response?.userList);
+                setSettings(response?.settings);
+            }
+            setLoading(false);
+
         } catch (error) {
-            console.log(error);
+            // console.log(error);
         }
     }
 
@@ -54,15 +64,16 @@ const SelectIdeas = () => {
     }
 
     const getUserSettings = () => {
-        const userSettings = JSON.parse(localStorage.getItem('data'))?.settings;
-        userSettings && setSettings(userSettings);
+        const userSettings = JSON.parse(localStorage.getItem('data'))?.settings || settings?.settings;
+        setSettings(userSettings);
+        return userSettings;
     }
 
     const obtainNewElement = async () => {
         try {
             setLoadingOneIdea(true);
             getUserSettings();
-            const response = await createOneSuggestion( listIdeas.length+1, settings);
+            const response = await createOneIdea( listIdeas.length+1, settings);
             const newList = [...listIdeas, response];
             setListIdeas(newList);
             saveData(newList, settings);

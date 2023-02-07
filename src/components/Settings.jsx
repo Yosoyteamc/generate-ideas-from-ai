@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import IconChangeSuggestion from './icons/IconChangePosition';
 import { SettingsContext } from '../context/settingsContext';
 import { profile } from '../constants/dataPerDefault';
@@ -12,6 +12,8 @@ const Settings = () => {
     const {setting, setSettings} = useContext(SettingsContext);
     const [error, setError] = useState(false);
     const [save , setSave] = useState(false);
+    const saveComplete = useRef();
+    const removeComplete = useRef();
 
     const handleChange = (e) => {
         setNewProfile(e.target.value);
@@ -29,10 +31,14 @@ const Settings = () => {
     }
 
     useEffect(() => {
-        const { settings } = JSON.parse(localStorage.getItem('data'));
-        setSelectedProfile(settings.profile);
-        setListFocus(settings.preferences);
-        // console.log(settings);
+        try {
+            const data = JSON.parse(localStorage.getItem('data')) || setting;
+            setSelectedProfile(data?.settings.profile || data?.profile || 'default');
+            setListFocus(data?.settings.preferences || data?.preferences || ['default']);
+        }
+        catch (error) {
+            console.log(error);
+        }
     }, []);
 
     const setOnList = (e) => {
@@ -51,15 +57,29 @@ const Settings = () => {
             setSave(false);
             return;
         }
-
-        const data = JSON.parse(localStorage.getItem('data'));
-        data.settings = {
+        // const data = JSON.parse(localStorage.getItem('data'));
+        const newSettings = {
             profile: selectedProfile,
             preferences: listFocus
         }
-        setSettings(data.settings);
-        localStorage.setItem('data', JSON.stringify(data));
+        setSettings(newSettings);
+        localStorage.clear('data');
+        // localStorage.setItem('data', JSON.stringify(data.settings));
+        saveComplete.current.style.display = 'inline-block';
+        setTimeout(() => {
+            saveComplete.current.style.display = 'none';
+        }
+        , 2000);
     }
+
+    const removeData = () => {
+        localStorage.clear('data');
+        removeComplete.current.style.display = 'inline-block';
+        setTimeout(() => {
+            removeComplete.current.style.display = 'none';
+        }, 2000);
+    }
+
 
     return (
         <div className='w-screen lg:ml-[100px]'>
@@ -110,7 +130,10 @@ const Settings = () => {
                     <div className='mt-3 mb-6'>
                         <p className='text-md mb-3'>Si desea guardar los cambios realizados, puede hacerlo aquí:</p>
                         <p className='mb-4 text-sm'>Tenga en cuenta que esta acción no se puede deshacer.</p>
-                        <button className={`bg-[#5CF2AC] px-4 py-2  rounded-lg transition-all duration-200 ${!save? 'pointer-events-none text-black/25':'' }`} onClick={()=>{ saveSettings()  }}>Guardar cambios</button>
+                        <div>
+                            <button className={`bg-[#5CF2AC] px-4 py-2  rounded-lg transition-all duration-200 ${!save? 'pointer-events-none text-black/25':'' }`} onClick={()=>{ saveSettings()  }}>Guardar cambios</button>
+                            <span ref={saveComplete} className='ml-3 text-sm italic text-[#0d0d0d] hidden'>Se realizaron los cambios!</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -119,7 +142,10 @@ const Settings = () => {
                     <div className='mt-3 mb-6'>
                         <p className='text-md mb-3'>Si desea eliminar todos los datos generados de la aplicación con sus ajustes anteriores, puede hacerlo aquí:</p>
                         <p className='mb-4 text-sm'>Tenga en cuenta que esta acción no se puede deshacer.</p>
-                        <button className='bg-[#F25A44] px-4 py-2  text-white rounded-lg transition-all duration-200' onClick={()=>{ localStorage.clear('data') }}>Eliminar datos</button>
+                        <div>
+                            <button className='bg-[#F25A44] px-4 py-2  text-white rounded-lg transition-all duration-200' onClick={()=>{ removeData() }}>Eliminar datos</button>
+                            <span ref={removeComplete} className='ml-3 text-sm italic text-[#0d0d0d] hidden'>Se realizaron los cambios!</span>
+                        </div>
                     </div>
                 </div>
             </div>

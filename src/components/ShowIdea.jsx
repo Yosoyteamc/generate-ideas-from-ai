@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import IconArrow from './icons/IconArrow';
 import IconEdit from './icons/IconEdit';
@@ -6,7 +6,8 @@ import IconChange from './icons/IconChangePosition';
 import IconRemove from './icons/IconRemove';
 import IconHeart from './icons/IconHeart';
 import { intlFormatDistance } from 'date-fns';
-import { createOneSuggestion } from '../service/CohereIA';
+import { createOneIdea } from '../service/CohereIA';
+import { SettingsContext } from '../context/settingsContext';
 
 const iconReference = 28;
 
@@ -15,6 +16,7 @@ const ShowIdea = () => {
 
     const location = useLocation();
     const [idea, setIdea] = useState();
+    const { settings, setSettings } = useContext(SettingsContext);
     const [date, setDate] = useState('Calculando...');
     const [showNotification, setShowNotification] = useState(false);
     const [loadingOneIdeas, setLoadingOneIdeas] = useState(false);
@@ -64,7 +66,7 @@ const ShowIdea = () => {
     const removeIdea = (id = idea.id) => {
         try{
             const { userList, settings } = JSON.parse(localStorage.getItem('data'));
-            const newList = userList.filter(suggestion => suggestion.id !== id);
+            const newList = userList.filter(ideaToRemove => ideaToRemove.id !== id);
             localStorage.setItem('data', JSON.stringify({ userList: newList, settings }));
             navigateToMain();
         }
@@ -80,11 +82,18 @@ const ShowIdea = () => {
         }, 5000);
     }
 
+    const getUserSettings = () => {
+        const userSettings = JSON.parse(localStorage.getItem('data'))?.settings || settings?.settings;
+        setSettings(userSettings);
+        return userSettings;
+    }
+
     const changeIdea = async (idea) => {
         try {
+            getUserSettings();
             setLoadingOneIdeas(true);
             const { userList, settings } = JSON.parse(localStorage.getItem('data'));
-            const response = await createOneSuggestion((idea.position), settings);
+            const response = await createOneIdea((idea.position), settings);
             const newList = userList.map(ideaToChange => {
                 if(ideaToChange.id === idea.id) {
                     ideaToChange = response;
@@ -105,7 +114,7 @@ const ShowIdea = () => {
         const idea = userList.find((user) => user.id === id);
         // console.log(idea);
         setIdea(idea);
-        setDate(dateNow(idea?.date));
+        setDate(dateNow(idea?.dateIn));
         changeIsRead(idea?.id);
     }, [location.state]);
 

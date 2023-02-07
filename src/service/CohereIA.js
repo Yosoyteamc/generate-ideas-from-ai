@@ -1,5 +1,6 @@
 import { translateArrayText } from "./TextTranslateAPI";
 import { v4 as uuidv4 } from 'uuid';
+import { Idea } from "../models/idea.class";
 
 const COHERE_API_GENERATE_URL = 'https://api.cohere.ai/generate';
 const COHERE_API_DETECT_LANGUAGE_URL = 'https://api.cohere.ai/detect-language';
@@ -9,7 +10,7 @@ const COHERE_API_VERSION = '2022-12-06';
 
 async function generateListOfTitles( profile, preferences ){
 
-    console.log('generating titles...');
+    // console.log('generating titles...');
 
     const data = {
         model: 'command-xlarge-nightly',
@@ -45,7 +46,7 @@ async function generateListOfTitles( profile, preferences ){
 }
 
 async function generateDescription(title, profile, preferences){
-    console.log('generating description...');
+    // console.log('generating description...');
     const data = {
         model: 'command-xlarge-nightly',
         prompt: `Genere un parrafo para un ${profile} de ${preferences} que complemente este titulo: '${title}'`,
@@ -75,7 +76,7 @@ async function generateDescription(title, profile, preferences){
 }
 
 async function generateHashTags(title, profile, preferences){
-    console.log('generating hashtags...');
+    // console.log('generating hashtags...');
     const data = {
         model: 'command-xlarge-nightly',
         prompt: `Genere 5 hashtags para un ${profile} de ${preferences} que aporten a este titulo: '${title}'`,
@@ -110,7 +111,7 @@ async function generateHashTags(title, profile, preferences){
 
 async function detectLanguage(input){
 
-    console.log('detecting language...');
+    // console.log('detecting language...');
 
     const data = {
         texts: ['Hello World' , input] 
@@ -130,13 +131,13 @@ async function detectLanguage(input){
 
 }
 
-export async function createOneSuggestion(position, settings) {
-    const { profile, preferences} = settings;
-    const randomPreference = preferences[Math.floor(Math.random() * preferences.length)];
-    console.log('creating one suggestion...');
+export async function createOneIdea(position, {profile, preferences}) {
+    // console.log(profile, preferences)
+    const randomPreference = preferences.length === 1 ? preferences[0] : preferences[Math.floor(Math.random() * preferences.length)];
+    // console.log('creating one idea...');
     const suggestionsTitlesArray = await generateListOfTitles(profile, randomPreference);
     const randomIndex = Math.floor(Math.random() * suggestionsTitlesArray.length);
-    console.log('randomIndex', randomIndex);
+    // console.log('randomIndex', randomIndex);
     const suggestion = suggestionsTitlesArray[randomIndex];
     const language = await detectLanguage(suggestion);
 
@@ -147,30 +148,26 @@ export async function createOneSuggestion(position, settings) {
                   suggestion.replace(/\d+./g,'').split(':') : 
                   suggestion.replace(/\d+./g,'');
 
-    const date = new Date().getTime();
-
-    return {
-        id: uuidv4(),
-        title: title,
-        type: `${profile} de ${randomPreference}`,
+    return new Idea(
+        uuidv4(),
+        title,
+        `${profile} de ${randomPreference}`,
         description,
         hashtags,
         position,
-        isFavorite: false,
-        isRead: false,
-        date,
-        originalLanguage: language
-    } 
+        language
+    ) 
 }
 
 
-export async function createSuggestions({ profile, preferences}) {
+export async function createIdeas({ profile, preferences}) {
 
-    console.log('creating suggestions...');
+    // console.log(profile, preferences)
+    // console.log('creating ideas...');
 
-    const randomIndex = Math.floor(Math.random() * preferences.length);
-
-    const suggestionsTitlesArray = await generateListOfTitles(profile, preferences);
+    const randomIndex = preferences.length === 1? 0 : Math.floor(Math.random() * preferences.length);
+    // console.log('randomIndex', randomIndex, preferences[randomIndex]);
+    const suggestionsTitlesArray = await generateListOfTitles(profile, preferences[randomIndex]);
     // console.log(suggestionsTitlesArray);
     const languageArray = await Promise.all(suggestionsTitlesArray.map(async (title) => {
         return await detectLanguage(title);
@@ -186,36 +183,31 @@ export async function createSuggestions({ profile, preferences}) {
     //     console.log(suggestionsTitlesArray, language)
     // );
 
-    const suggestions = suggestionsTitlesArray.map((suggestion, index) => {
+    const ideas = suggestionsTitlesArray.map((idea, index) => {
         
-        const title = suggestion.matchAll(':')?
-            suggestion.replace(/\d+./g,'').split(':') : 
-            suggestion.replace(/\d+./g,'');
+        const title = idea.matchAll(':')?
+            idea.replace(/\d+./g,'').split(':') : 
+            idea.replace(/\d+./g,'');
         
         const description = suggestionDescriptionsArray[index];
         const hashtags = suggestionsHashTagsArray[index] || [`#${profile}`, `#${preferences[randomIndex]}`];
         const language = languageArray[index];
-        
-        const date = new Date().getTime();
 
-        return {
-            id: uuidv4(),
-            title: title[0],
-            type: `${profile} de ${preferences[randomIndex]}`,
+        return new Idea(
+            uuidv4(),
+            title[0],
+            `${profile} de ${preferences[randomIndex]}`,
             description,
             hashtags,
-            position: index + 1,
-            isFavorite: false,
-            isRead: false,
-            date,
-            originalLanguage: language
-        }  
+            index + 1,
+            language
+        )
     });
 
     // console.log(suggestionsTitlesArray, language);
-    console.log(suggestions);
     // console.log(typeof suggestions); 
     // console.log(suggestionsHashTagsArray);
+    // console.log(suggestions);
 
-    return suggestions;
+    return ideas;
 }
